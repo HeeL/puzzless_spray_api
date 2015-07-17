@@ -5,10 +5,10 @@ import spray.testkit.Specs2RouteTest
 import spray.http._
 import StatusCodes._
 
-class MyServiceSpec extends Specification with Specs2RouteTest with MyService {
+class PuzzlessSpec extends Specification with Specs2RouteTest with Puzzless {
   def actorRefFactory = system
   
-  "MyService" should {
+  "Puzzless" should {
 
     "return a greeting for GET requests to the root path" in {
       Get() ~> myRoute ~> check {
