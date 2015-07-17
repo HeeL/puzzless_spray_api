@@ -1,6 +1,7 @@
 # API for the Puzzless project
 
-This application provides an API for the [Puzzless](http://puzzless.com) project. It has been built with Scala and [Spray](http://www.spray.io)
+This application provides an API for the [Puzzless](http://puzzless.com) project. It has been built with Scala and [Spray](http://www.spray.io). 
+The main purpose of this API is to provide all the information from Puzzless website to an Android app written on [Scaloid](https://github.com/pocorall/scaloid/).
 
 ## Installation
 
@@ -8,6 +9,7 @@ This application provides an API for the [Puzzless](http://puzzless.com) project
 * Install sbt ([http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html](http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html)
 
 ## Run and Test
+
 Run sbt
 
         $ sbt
