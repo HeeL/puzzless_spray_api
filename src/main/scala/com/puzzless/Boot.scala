@@ -1,4 +1,4 @@
-package com.example
+package com.puzzless
 
 import akka.actor.{ActorSystem, Props}
 import akka.io.IO
