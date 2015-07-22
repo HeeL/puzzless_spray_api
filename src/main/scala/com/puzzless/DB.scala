@@ -9,5 +9,14 @@ object Db extends Instance(
   url = "jdbc:postgresql://localhost/puzzless_spray_api",
   user = "heel",
   password = "",
-  initMode = InitMode.Create
-)
+  initMode = InitMode.DropAllCreate
+) {
+
+  // seeding
+  Db.save(Category(Db.uuid, "Math"))
+  Db.save(Category(Db.uuid, "Logic"))
+
+  // generate random uuid
+  def uuid = java.util.UUID.randomUUID.toString
+}
+

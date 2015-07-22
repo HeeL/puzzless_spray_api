@@ -1,3 +1,10 @@
 package com.puzzless.models
 
-case class Category(title: String)
+import spray.json.DefaultJsonProtocol
+
+
+case class Category(uuid: String, title: String)
+
+object CategoryJsonProtocol extends DefaultJsonProtocol {
+  implicit val categoryFormat = jsonFormat2(Category)
+}
