@@ -22,4 +22,8 @@ object Category {
     findByUuid(uuid).map(c => c.copy(title = title)).map(Db.save)
   }
 
+  def delete(uuid: String) = {
+    findByUuid(uuid).map(c => Db.delete(c))
+  }
+
 }

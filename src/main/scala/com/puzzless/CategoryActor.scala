@@ -29,6 +29,10 @@ class CategoryActor extends Actor with ActorLogging {
       val category = Category.update(uuid, title).getOrElse(false).asInstanceOf[Category]
       val result = mapper.writeValueAsString(category)
       sender ! result
+
+    case ("delete", uuid: String) =>
+      val result = Category.delete(uuid).getOrElse("ERROR").toString.asInstanceOf[String]
+      sender ! result
   }
 
 }

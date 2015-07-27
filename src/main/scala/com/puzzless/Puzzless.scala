@@ -60,13 +60,15 @@ class PuzzlessActor extends Actor with HttpService {
       put {
         formFields('title.as[String]) { title =>
           complete {
-            (category ?("update", uuid, title)).mapTo[String]
+            (category ? ("update", uuid, title)).mapTo[String]
           }
         }
       } ~
       authenticate(BasicAuth()) { user =>
         delete {
-          complete { s"DELETED ${uuid}" }
+          complete {
+            (category ? ("delete", uuid)).mapTo[String]
+          }
         }
       }
     }
