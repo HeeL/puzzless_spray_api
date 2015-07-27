@@ -44,8 +44,10 @@ class PuzzlessActor extends Actor with HttpService {
         }
       } ~
       post {
-        formFields('uuid.as[String], 'title.as[String]) { (uuid, title) =>
-          complete { s"CREATED ${title} ${uuid}" }
+        formFields('title.as[String]) { title =>
+          complete {
+            (category ? ("create", title)).mapTo[String]
+          }
         }
       }
     } ~

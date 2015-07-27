@@ -20,6 +20,11 @@ class CategoryActor extends Actor with ActorLogging {
       val result = mapper.writeValueAsString(category)
       sender ! result
 
+    case ("create", title: String) =>
+      val category = Category.create(title).asInstanceOf[Category]
+      val result = mapper.writeValueAsString(category)
+      sender ! result
+
     case ("update", uuid: String, title: String) =>
       val category = Category.update(uuid, title).getOrElse(false).asInstanceOf[Category]
       val result = mapper.writeValueAsString(category)

@@ -14,6 +14,10 @@ object Category {
     Db.query[Category].fetch()
   }
 
+  def create(title: String) = {
+    Db.save(Category(Db.uuid, title))
+  }
+
   def update(uuid: String, title: String) = {
     findByUuid(uuid).map(c => c.copy(title = title)).map(Db.save)
   }

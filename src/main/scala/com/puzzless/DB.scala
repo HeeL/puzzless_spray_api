@@ -13,8 +13,8 @@ object Db extends Instance(
 ) {
 
   // seeding
-  Db.save(Category(Db.uuid, "Math"))
-  Db.save(Category(Db.uuid, "Logic"))
+  Category.create("Math")
+  Category.create("Logic")
 
   // generate random uuid
   def uuid = java.util.UUID.randomUUID.toString
