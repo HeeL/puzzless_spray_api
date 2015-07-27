@@ -1,8 +1,7 @@
 package com.puzzless
 
 import akka.actor.Actor
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import akka.util.Timeout
 import spray.routing._
 import spray.http._
 import MediaTypes._
@@ -11,10 +10,14 @@ import com.puzzless.models._
 import akka.actor.Props
 import spray.routing.HttpService
 
+import akka.pattern.ask
+import spray.routing.authentication.BasicAuth
+import scala.concurrent.duration._
+
 
 // we don't implement our route structure directly in the service actor because
 // we want to be able to test it independently, without having to spin up an actor
-class PuzzlessActor extends Actor with Puzzless {
+class PuzzlessActor extends Actor with HttpService {
 
   // the HttpService trait defines only one abstract member, which
   // connects the services environment to the enclosing actor or test
@@ -24,24 +27,44 @@ class PuzzlessActor extends Actor with Puzzless {
   // other things here, like request stream processing
   // or timeout handling
   def receive = runRoute(myRoute)
-}
 
+  implicit val timeout = Timeout(5.seconds)
+  //implicit def executionContext = actorRefFactory.dispatcher
+  import context.dispatcher
 
-// this trait defines our service behavior independently from the service actor
-trait Puzzless extends HttpService {
-
-  val mapper = new ObjectMapper()
-  mapper.registerModule(DefaultScalaModule)
+  val category = context.system.actorOf(Props[CategoryActor], "category")
 
   val myRoute =
     path("categories") {
       get {
         respondWithMediaType(`application/json`) {
-          val categories = Db.query[Category].fetch()
           complete {
-            mapper.writeValueAsString(categories)
+            (category ? "list").mapTo[String]
           }
+        }
+      } ~
+      post {
+        formFields('uuid.as[String], 'title.as[String]) { (uuid, title) =>
+          complete { s"CREATED ${title} ${uuid}" }
+        }
+      }
+    } ~
+    pathPrefix("categories" / Segment) { uuid =>
+      get {
+        complete {
+          (category ? ("show", uuid)).mapTo[String]
+        }
+      } ~
+      put {
+        formFields('title.as[String]) { title =>
+          complete { s"UPDATED ${uuid} with ${title}" }
+        }
+      } ~
+      authenticate(BasicAuth()) { user =>
+        delete {
+          complete { s"DELETED ${uuid}" }
         }
       }
     }
 }
+
