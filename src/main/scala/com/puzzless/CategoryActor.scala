@@ -12,10 +12,16 @@ class CategoryActor extends Actor with ActorLogging {
   def receive = {
     case "list" =>
       val categories = Category.listAll
-      val result = mapper.writeValueAsString(categories)
+      val result = mapper.writeValueAsString(categories).asInstanceOf[Stream[Category]]
       sender ! result
+
     case ("show", uuid: String) =>
-      val category = Category.findByUuid(uuid)
+      val category = Category.findByUuid(uuid).getOrElse(false).asInstanceOf[Category]
+      val result = mapper.writeValueAsString(category)
+      sender ! result
+
+    case ("update", uuid: String, title: String) =>
+      val category = Category.update(uuid, title).getOrElse(false).asInstanceOf[Category]
       val result = mapper.writeValueAsString(category)
       sender ! result
   }

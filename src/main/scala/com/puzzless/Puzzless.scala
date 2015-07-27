@@ -26,7 +26,7 @@ class PuzzlessActor extends Actor with HttpService {
   // this actor only runs our route, but you could add
   // other things here, like request stream processing
   // or timeout handling
-  def receive = runRoute(myRoute)
+  def receive = runRoute(puzzlessRoute)
 
   implicit val timeout = Timeout(5.seconds)
   //implicit def executionContext = actorRefFactory.dispatcher
@@ -34,7 +34,7 @@ class PuzzlessActor extends Actor with HttpService {
 
   val category = context.system.actorOf(Props[CategoryActor], "category")
 
-  val myRoute =
+  val puzzlessRoute =
     path("categories") {
       get {
         respondWithMediaType(`application/json`) {
@@ -57,7 +57,9 @@ class PuzzlessActor extends Actor with HttpService {
       } ~
       put {
         formFields('title.as[String]) { title =>
-          complete { s"UPDATED ${uuid} with ${title}" }
+          complete {
+            (category ?("update", uuid, title)).mapTo[String]
+          }
         }
       } ~
       authenticate(BasicAuth()) { user =>

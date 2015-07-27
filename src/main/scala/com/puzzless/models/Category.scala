@@ -7,10 +7,15 @@ case class Category(uuid: String, title: String)
 object Category {
 
   def findByUuid(uuid: String) = {
-    Db.query[Category].whereEqual("uuid", uuid).fetchOne().getOrElse(false).asInstanceOf[Category]
+    Db.query[Category].whereEqual("uuid", uuid).fetchOne()
   }
 
   def listAll = {
-    Db.query[Category].fetch().asInstanceOf[Stream[Category]]
+    Db.query[Category].fetch()
   }
+
+  def update(uuid: String, title: String) = {
+    findByUuid(uuid).map(c => c.copy(title = title)).map(Db.save)
+  }
+
 }
