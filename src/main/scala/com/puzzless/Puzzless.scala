@@ -28,7 +28,7 @@ class PuzzlessActor extends Actor with HttpService {
   // or timeout handling
   def receive = runRoute(puzzlessRoute)
 
-  implicit val timeout = Timeout(10.seconds)
+  implicit val timeout = Timeout(5.seconds)
   //implicit def executionContext = actorRefFactory.dispatcher
   import context.dispatcher
 
@@ -36,6 +36,15 @@ class PuzzlessActor extends Actor with HttpService {
   val riddle = context.system.actorOf(Props[RiddleActor], "riddle")
 
   val puzzlessRoute =
+    path("") {
+      get {
+        respondWithMediaType(`text/plain`) {
+          complete {
+            "root"
+          }
+        }
+      }
+    } ~
     // categories section
     path("categories") {
       get {
@@ -79,14 +88,14 @@ class PuzzlessActor extends Actor with HttpService {
     get {
       respondWithMediaType(`application/json`) {
         complete {
-          (category ? "list").mapTo[String]
+          (riddle ? "list").mapTo[String]
         }
       }
     } ~
       post {
         formFields('title.as[String], 'text.as[String], 'answer.as[String]) { (title, text, answer) =>
           complete {
-            (category ? ("create", title, text, answer)).mapTo[String]
+            (riddle ? ("create", title, text, answer)).mapTo[String]
           }
         }
       }
@@ -94,20 +103,20 @@ class PuzzlessActor extends Actor with HttpService {
     pathPrefix("riddles" / Segment) { uuid =>
       get {
         complete {
-          (category ? ("show", uuid)).mapTo[String]
+          (riddle ? ("show", uuid)).mapTo[String]
         }
       } ~
         put {
           formFields('title.as[String], 'text.as[String], 'answer.as[String]) { (title, text, answer) =>
             complete {
-              (category ? ("update", uuid, title, text, answer)).mapTo[String]
+              (riddle ? ("update", uuid, title, text, answer)).mapTo[String]
             }
           }
         } ~
         authenticate(BasicAuth()) { user =>
           delete {
             complete {
-              (category ? ("delete", uuid)).mapTo[String]
+              (riddle ? ("delete", uuid)).mapTo[String]
             }
           }
         }

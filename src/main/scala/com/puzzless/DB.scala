@@ -5,7 +5,7 @@ import sorm._
 
 
 object Db extends Instance(
-  entities = Set(Entity[Category]()),
+  entities = Set() + Entity[Category]() + Entity[Riddle](),
   url = "jdbc:postgresql://localhost/puzzless_spray_api",
   user = "heel",
   password = "",
