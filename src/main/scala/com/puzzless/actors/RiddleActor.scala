@@ -1,6 +1,7 @@
-package com.puzzless
+package com.puzzless.actors
 
 import akka.actor.{Actor, ActorLogging}
+import com.puzzless.JsonUtil
 import com.puzzless.models.Riddle
 
 class RiddleActor extends Actor with ActorLogging {

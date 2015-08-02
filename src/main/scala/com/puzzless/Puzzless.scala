@@ -2,10 +2,9 @@ package com.puzzless
 
 import akka.actor.Actor
 import akka.util.Timeout
-import spray.routing._
+import com.puzzless.actors._
 import spray.http._
 import MediaTypes._
-import com.puzzless.models._
 import akka.actor.Props
 import spray.routing.HttpService
 import akka.pattern.ask
