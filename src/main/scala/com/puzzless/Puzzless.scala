@@ -28,13 +28,15 @@ class PuzzlessActor extends Actor with HttpService {
   // or timeout handling
   def receive = runRoute(puzzlessRoute)
 
-  implicit val timeout = Timeout(5.seconds)
+  implicit val timeout = Timeout(10.seconds)
   //implicit def executionContext = actorRefFactory.dispatcher
   import context.dispatcher
 
   val category = context.system.actorOf(Props[CategoryActor], "category")
+  val riddle = context.system.actorOf(Props[RiddleActor], "riddle")
 
   val puzzlessRoute =
+    // categories section
     path("categories") {
       get {
         respondWithMediaType(`application/json`) {
@@ -43,13 +45,13 @@ class PuzzlessActor extends Actor with HttpService {
           }
         }
       } ~
-      post {
-        formFields('title.as[String]) { title =>
-          complete {
-            (category ? ("create", title)).mapTo[String]
+        post {
+          formFields('title.as[String]) { title =>
+            complete {
+              (category ? ("create", title)).mapTo[String]
+            }
           }
         }
-      }
     } ~
     pathPrefix("categories" / Segment) { uuid =>
       get {
@@ -57,20 +59,60 @@ class PuzzlessActor extends Actor with HttpService {
           (category ? ("show", uuid)).mapTo[String]
         }
       } ~
-      put {
-        formFields('title.as[String]) { title =>
-          complete {
-            (category ? ("update", uuid, title)).mapTo[String]
+        put {
+          formFields('title.as[String]) { title =>
+            complete {
+              (category ? ("update", uuid, title)).mapTo[String]
+            }
+          }
+        } ~
+        authenticate(BasicAuth()) { user =>
+          delete {
+            complete {
+              (category ? ("delete", uuid)).mapTo[String]
+            }
           }
         }
-      } ~
-      authenticate(BasicAuth()) { user =>
-        delete {
+    } ~
+  // riddles section
+  path("riddles") {
+    get {
+      respondWithMediaType(`application/json`) {
+        complete {
+          (category ? "list").mapTo[String]
+        }
+      }
+    } ~
+      post {
+        formFields('title.as[String], 'text.as[String], 'answer.as[String]) { (title, text, answer) =>
           complete {
-            (category ? ("delete", uuid)).mapTo[String]
+            (category ? ("create", title, text, answer)).mapTo[String]
           }
         }
       }
+  } ~
+    pathPrefix("riddles" / Segment) { uuid =>
+      get {
+        complete {
+          (category ? ("show", uuid)).mapTo[String]
+        }
+      } ~
+        put {
+          formFields('title.as[String], 'text.as[String], 'answer.as[String]) { (title, text, answer) =>
+            complete {
+              (category ? ("update", uuid, title, text, answer)).mapTo[String]
+            }
+          }
+        } ~
+        authenticate(BasicAuth()) { user =>
+          delete {
+            complete {
+              (category ? ("delete", uuid)).mapTo[String]
+            }
+          }
+        }
     }
+
+
 }
 
