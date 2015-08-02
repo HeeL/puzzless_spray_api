@@ -14,8 +14,8 @@ object Db extends Instance(
 
   // seeding
   Category.create("Math")
-  Category.create("Logic")
-  Riddle.create("Riddle title", "Text of the riddle", "The answer")
+  val category = Category.create("Logic")
+  Riddle.create(category.uuid, "Riddle title", "Text of the riddle", "The answer")
 
   // generate random uuid
   def uuid = java.util.UUID.randomUUID.toString

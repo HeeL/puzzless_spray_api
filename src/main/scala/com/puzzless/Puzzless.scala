@@ -93,9 +93,10 @@ class PuzzlessActor extends Actor with HttpService {
       }
     } ~
       post {
-        formFields('title.as[String], 'text.as[String], 'answer.as[String]) { (title, text, answer) =>
+        formFields('category_uuid.as[String], 'title.as[String], 'text.as[String], 'answer.as[String]) {
+          (category_uuid, title, text, answer) =>
           complete {
-            (riddle ? ("create", title, text, answer)).mapTo[String]
+            (riddle ? ("create", category_uuid, title, text, answer)).mapTo[String]
           }
         }
       }
