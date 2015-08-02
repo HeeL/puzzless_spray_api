@@ -91,6 +91,13 @@ class PuzzlessActor extends Actor with HttpService {
         }
       }
   } ~
+    pathPrefix("riddles" / "category" / Segment) { category_uuid =>
+      get {
+        complete {
+          (riddle ? ("category", category_uuid)).mapTo[String]
+        }
+      }
+    } ~
     pathPrefix("riddles" / Segment) { uuid =>
       get {
         complete {

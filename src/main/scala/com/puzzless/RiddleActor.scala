@@ -11,6 +11,11 @@ class RiddleActor extends Actor with ActorLogging {
       val result = JsonUtil.toJson(riddles)
       sender ! result
 
+    case ("category", category_uuid: String) =>
+      val riddles = Riddle.category(category_uuid)
+      val result = JsonUtil.toJson(riddles)
+      sender ! result
+
     case ("show", uuid: String) =>
       val riddle = Riddle.findByUuid(uuid)
       val result = JsonUtil.toJson(riddle)

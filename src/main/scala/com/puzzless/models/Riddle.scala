@@ -6,13 +6,11 @@ case class Riddle(category: Category, uuid: String, title: String, text: String,
 
 object Riddle {
 
-  def findByUuid(uuid: String) = {
-    Db.query[Riddle].whereEqual("uuid", uuid).fetchOne()
-  }
+  def findByUuid(uuid: String) = Db.query[Riddle].whereEqual("uuid", uuid).fetchOne()
 
-  def listAll = {
-    Db.query[Riddle].fetch()
-  }
+  def listAll = Db.query[Riddle].fetch()
+
+  def category(category_uuid: String) = Db.query[Riddle].whereEqual("category.uuid", category_uuid).fetch()
 
   def create(category_uuid: String, title: String, text: String, answer: String) = {
     val category = Category.findByUuid(category_uuid).get
@@ -23,8 +21,6 @@ object Riddle {
     findByUuid(uuid).map(c => c.copy(title = title, text = text, answer = answer)).map(Db.save)
   }
 
-  def delete(uuid: String) = {
-    findByUuid(uuid).map(c => Db.delete(c))
-  }
+  def delete(uuid: String) = findByUuid(uuid).map(c => Db.delete(c))
 
 }
