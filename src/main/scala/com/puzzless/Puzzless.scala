@@ -11,16 +11,20 @@ import akka.pattern.ask
 import spray.routing.authentication.BasicAuth
 import scala.concurrent.duration._
 
-class PuzzlessActor extends Actor with HttpService {
+class PuzzlessActor extends Actor with PuzzlessService {
+
+  import context.dispatcher
 
   def actorRefFactory = context
 
   def receive = runRoute(puzzlessRoute)
 
-  implicit val timeout = Timeout(5.seconds)
+}
 
+trait PuzzlessService extends HttpService with Actor {
   import context.dispatcher
 
+  implicit val timeout = Timeout(5.seconds)
   val category = context.system.actorOf(Props[CategoryActor], "category")
   val riddle = context.system.actorOf(Props[RiddleActor], "riddle")
 
@@ -118,7 +122,5 @@ class PuzzlessActor extends Actor with HttpService {
           }
         }
     }
-
-
 }
 
