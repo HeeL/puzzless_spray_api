@@ -13,8 +13,6 @@ import scala.concurrent.duration._
 
 class PuzzlessActor extends Actor with PuzzlessService {
 
-  import context.dispatcher
-
   def actorRefFactory = context
 
   def receive = runRoute(puzzlessRoute)
