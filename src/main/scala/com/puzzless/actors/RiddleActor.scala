@@ -38,5 +38,4 @@ class RiddleActor extends Actor with ActorLogging {
       sender ! result
   }
 
-
 }
