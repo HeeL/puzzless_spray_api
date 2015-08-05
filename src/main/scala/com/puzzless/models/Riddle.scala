@@ -2,7 +2,7 @@ package com.puzzless.models
 
 import com.puzzless.Db
 
-case class Riddle(category: Category, uuid: String, title: String, text: String, answer: String, rating: Int)
+case class Riddle(uuid: String, title: String, text: String, answer: String, rating: Int, category: Category)
 
 object Riddle {
 
@@ -14,7 +14,7 @@ object Riddle {
 
   def create(category_uuid: String, title: String, text: String, answer: String) = {
     val category = Category.findByUuid(category_uuid).get
-    Db.save(Riddle(category, Db.uuid, title, text, answer, 0))
+    Db.save(Riddle(Db.uuid, title, text, answer, 0, category))
   }
 
   def update(uuid: String, title: String, text: String, answer: String) = {
