@@ -7,7 +7,7 @@ As for now the API represents the resources:
 * categories of riddles (logic, math...)
 * user comments to riddles.
 
-There is an API documentation with detailed information about all the routes and parameters. Here is a very brief overview of available routes to get an idea what you can do:
+There is an [API documentation](http://heel.github.io/puzzless_spray_api/) with detailed information about all the routes and parameters. Here is a very brief overview of available routes to get an idea what you can do:
 
 ### Categories:
 
@@ -35,7 +35,7 @@ There is an API documentation with detailed information about all the routes and
       PUT     /comments/:uuid            => update the comment with specified uuid
       DELETE  /comments/:uuid            => delete the comment with specified uuid
 
-All the details and specifications about the requests and responses can be found on this page.
+All the details and specifications about the requests and responses can be found [here](http://heel.github.io/puzzless_spray_api/).
 
 ## Installation
 
