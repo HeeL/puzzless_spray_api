@@ -16,41 +16,43 @@ trait CategoryApi extends HttpService with BaseActor {
 
   val categoryRoute =
       // categories section
-      path("categories") {
-        get {
-          respondWithMediaType(`application/json`) {
-            complete {
-              (category ? "list").mapTo[String]
-            }
-          }
-        } ~
-          post {
-            formFields('title.as[String]) { title =>
+      pathPrefix("v1") {
+        path("categories") {
+          get {
+            respondWithMediaType(`application/json`) {
               complete {
-                (category ?("create", title)).mapTo[String]
-              }
-            }
-          }
-      } ~
-      pathPrefix("categories" / Segment) { uuid =>
-        get {
-          complete {
-            (category ?("show", uuid)).mapTo[String]
-          }
-        } ~
-          put {
-            formFields('title.as[String]) { title =>
-              complete {
-                (category ?("update", uuid, title)).mapTo[String]
+                (category ? "list").mapTo[String]
               }
             }
           } ~
-          authenticate(BasicAuth()) { user =>
-            delete {
-              complete {
-                (category ?("delete", uuid)).mapTo[String]
+            post {
+              formFields('title.as[String]) { title =>
+                complete {
+                  (category ?("create", title)).mapTo[String]
+                }
               }
             }
-          }
+        } ~
+        pathPrefix("categories" / Segment) { uuid =>
+          get {
+            complete {
+              (category ?("show", uuid)).mapTo[String]
+            }
+          } ~
+            put {
+              formFields('title.as[String]) { title =>
+                complete {
+                  (category ?("update", uuid, title)).mapTo[String]
+                }
+              }
+            } ~
+            authenticate(BasicAuth()) { user =>
+              delete {
+                complete {
+                  (category ?("delete", uuid)).mapTo[String]
+                }
+              }
+            }
+        }
       }
 }

@@ -11,29 +11,29 @@ There is an [API documentation](http://heel.github.io/puzzless_spray_api/) with 
 
 ### Categories:
 
-      GET     /categories                => list all the categories
-      GET     /categories/:uuid          => get a single category by uuid
-      POST    /categories                => create a new category from params
-      PUT     /categories/:uuid          => update the category by uuid
-      DELETE  /categories/:uuid          => delete the category by uuid
+      GET     /v1/categories                => list all the categories
+      GET     /v1/categories/:uuid          => get a single category by uuid
+      POST    /v1/categories                => create a new category from params
+      PUT     /v1/categories/:uuid          => update the category by uuid
+      DELETE  /v1/categories/:uuid          => delete the category by uuid
 
 ### Riddles:
 
-      GET     /riddles                   => list all the riddles
-      GET     /riddles/category/:uuid    => riddles from specified category
-      GET     /riddles/:uuid             => get a single riddle by uuid
-      POST    /riddles                   => create a new riddle from params
-      PUT     /riddles/:uuid             => update the riddle by uuid from params
-      DELETE  /riddles/:uuid             => delete the riddle by uuid
+      GET     /v1/riddles                   => list all the riddles
+      GET     /v1/riddles/category/:uuid    => riddles from specified category
+      GET     /v1/riddles/:uuid             => get a single riddle by uuid
+      POST    /v1/riddles                   => create a new riddle from params
+      PUT     /v1/riddles/:uuid             => update the riddle by uuid from params
+      DELETE  /v1/riddles/:uuid             => delete the riddle by uuid
 
 ### Comments:
 
-      GET     /comments                  => list of all the comments
-      GET     /comments/riddle/:uuid     => comments to the specified riddle
-      GET     /comments/:uuid            => get comment with specified uuid
-      POST    /comments                  => create a new comment from params
-      PUT     /comments/:uuid            => update the comment with specified uuid
-      DELETE  /comments/:uuid            => delete the comment with specified uuid
+      GET     /v1/comments                  => list of all the comments
+      GET     /v1/comments/riddle/:uuid     => comments to the specified riddle
+      GET     /v1/comments/:uuid            => get comment with specified uuid
+      POST    /v1/comments                  => create a new comment from params
+      PUT     /v1/comments/:uuid            => update the comment with specified uuid
+      DELETE  /v1/comments/:uuid            => delete the comment with specified uuid
 
 All the details and specifications about the requests and responses can be found [here](http://heel.github.io/puzzless_spray_api/).
 
