@@ -1,24 +1,25 @@
-package com.puzzless
+package com.puzzless.com.puzzless.apis
 
-import org.scalatest._
-import com.puzzless.apis._
-import spray.testkit.ScalatestRouteTest
-import spray.http.HttpEntity
-import spray.http.ContentTypes
-import spray.can.server.Stats
+import com.puzzless.apis.RootApi
+import org.specs2.mutable.Specification
+import spray.http.MediaTypes._
 import spray.http.StatusCodes._
+import spray.testkit.Specs2RouteTest
 
-class RootApiSpec extends FreeSpec with Matchers with ScalatestRouteTest with RootApi {
+
+class RootApiSpec extends Specification with Specs2RouteTest with RootApi {
+
   def actorRefFactory = system
 
-  "Root request" - {
-    "valid response" in {
+  "Root request" should {
+
+    "when calling GET / should return text root" in {
       Get("/") ~> rootRoute ~> check {
-        status should equal(OK)
-        contentType.toString should include("text/plain")
-        responseAs[String] should include("root")
+        status should beEqualTo(OK)
+        mediaType === `text/plain`
+        responseAs[String] must contain("root")
       }
     }
-  }
 
+  }
 }
