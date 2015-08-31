@@ -34,8 +34,7 @@ class RiddleActor extends Actor with ActorLogging {
 
     case ("delete", uuid: String) =>
       val riddle = Riddle.delete(uuid)
-      val result = JsonUtil.toJson(riddle)
-      sender ! result
+      sender ! ""
   }
 
 }

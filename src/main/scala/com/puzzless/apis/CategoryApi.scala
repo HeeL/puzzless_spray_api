@@ -1,18 +1,15 @@
 package com.puzzless.apis
 
-import com.puzzless.actors._
-import spray.http._
-import MediaTypes._
 import akka.actor.Props
-import spray.routing.HttpService
 import akka.pattern.ask
+import com.puzzless.actors._
+import spray.http.MediaTypes._
 import spray.routing.authentication.BasicAuth
 
 
-trait CategoryApi extends HttpService with BaseActor {
-  import context.dispatcher
+trait CategoryApi extends BaseHttpService with ActorHelper {
 
-  val category = context.system.actorOf(Props[CategoryActor], "category")
+  val category = actorRefFactory.actorOf(Props[CategoryActor], "category")
 
   val categoryRoute =
       // categories section
@@ -27,8 +24,10 @@ trait CategoryApi extends HttpService with BaseActor {
           } ~
             post {
               formFields('title.as[String]) { title =>
-                complete {
-                  (category ?("create", title)).mapTo[String]
+                respondWithMediaType(`application/json`) {
+                  complete {
+                    (category ?("create", title)).mapTo[String]
+                  }
                 }
               }
             }
@@ -41,8 +40,10 @@ trait CategoryApi extends HttpService with BaseActor {
           } ~
             put {
               formFields('title.as[String]) { title =>
-                complete {
-                  (category ?("update", uuid, title)).mapTo[String]
+                respondWithMediaType(`application/json`) {
+                  complete {
+                    (category ?("update", uuid, title)).mapTo[String]
+                  }
                 }
               }
             } ~

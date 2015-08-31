@@ -29,8 +29,7 @@ class CategoryActor extends Actor with ActorLogging {
 
     case ("delete", uuid: String) =>
       val category = Category.delete(uuid)
-      val result = JsonUtil.toJson(category)
-      sender ! result
+      sender ! ""
   }
 
 }

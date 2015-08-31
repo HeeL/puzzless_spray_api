@@ -1,18 +1,15 @@
 package com.puzzless.apis
 
-import com.puzzless.actors._
-import spray.http._
-import MediaTypes._
 import akka.actor.Props
-import spray.routing.HttpService
 import akka.pattern.ask
+import com.puzzless.actors._
+import spray.http.MediaTypes._
 import spray.routing.authentication.BasicAuth
 
 
-trait CommentApi extends HttpService with BaseActor {
-  import context.dispatcher
+trait CommentApi extends BaseHttpService with ActorHelper {
 
-  val comment = context.system.actorOf(Props[CommentActor], "comment")
+  val comment = actorRefFactory.actorOf(Props[CommentActor], "comment")
 
   val commentRoute = pathPrefix("v1") {
     path("comments") {
@@ -26,29 +23,37 @@ trait CommentApi extends HttpService with BaseActor {
         post {
           formFields('riddle_uuid.as[String], 'name.as[String], 'text.as[String]) {
             (riddle_uuid, name, text) =>
-              complete {
-                (comment ? ("create", riddle_uuid, name, text)).mapTo[String]
+              respondWithMediaType(`application/json`) {
+                complete {
+                  (comment ? ("create", riddle_uuid, name, text)).mapTo[String]
+                }
               }
           }
         }
     } ~
       pathPrefix("comments" / "riddle" / Segment) { riddle_uuid =>
         get {
-          complete {
-            (comment ? ("riddle", riddle_uuid)).mapTo[String]
+          respondWithMediaType(`application/json`) {
+            complete {
+              (comment ? ("riddle", riddle_uuid)).mapTo[String]
+            }
           }
         }
       } ~
       pathPrefix("comments" / Segment) { uuid =>
         get {
-          complete {
-            (comment ? ("show", uuid)).mapTo[String]
+          respondWithMediaType(`application/json`) {
+            complete {
+              (comment ? ("show", uuid)).mapTo[String]
+            }
           }
         } ~
           put {
             formFields('name.as[String], 'text.as[String]) { (name, text) =>
-              complete {
-                (comment ? ("update", uuid, name, text)).mapTo[String]
+              respondWithMediaType(`application/json`) {
+                complete {
+                  (comment ? ("update", uuid, name, text)).mapTo[String]
+                }
               }
             }
           } ~

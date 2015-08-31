@@ -34,8 +34,7 @@ class CommentActor extends Actor with ActorLogging {
 
     case ("delete", uuid: String) =>
       val comment = Comment.delete(uuid)
-      val result = JsonUtil.toJson(comment)
-      sender ! result
+      sender ! ""
   }
 
 }
